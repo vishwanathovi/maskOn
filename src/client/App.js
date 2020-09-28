@@ -15,8 +15,23 @@ export default class App extends Component {
     const { username } = this.state;
     return (
       <div>
-        {username ? <h1>{`Hello ${username}`}</h1> : <h1>Loading.. please wait!</h1>}
-        <img src={ReactImage} alt="react" />
+      <h1> MaskON </h1>
+        <div className="upload-main">
+        <h3> Upload Your Own Image </h3>
+        <div>
+                <input type="file" onChange={this.onFileChange} />
+                <button onClick={this.onFileUpload}>
+                  Upload!
+                </button>
+            </div>
+        </div>
+        <div className="webcam-main">
+        <h3> Start Webcam </h3>
+        </div>
+        <div className="default-images-main">
+        <h3> Choose from a default list of Images </h3>
+        </div>
+
       </div>
     );
   }
