@@ -3,6 +3,7 @@ import "./app.css";
 import ReactImage from "./react.png";
 
 import axios from "axios";
+import * as tf from "@tensorflow/tfjs";
 
 export default class App extends Component {
   state = { username: null };
@@ -12,6 +13,13 @@ export default class App extends Component {
       .then((res) => res.json())
       .then((user) => this.setState({ username: user.username }));
   }
+
+  loadModel = async () => {
+    const model = await tf.loadLayersModel(
+      "http://localhost:8080/data/model.json" // Define server URL as a constant
+    );
+    console.log("model loaded successfully");
+  };
 
   onFileChange = (event) => {
     // Update the state
@@ -68,6 +76,7 @@ export default class App extends Component {
     return (
       <div>
         <h1> MaskON </h1>
+        <button onClick={this.loadModel}> Load model </button>
         <div className="upload-main">
           <h3> Upload Your Own Image </h3>
           <div>
