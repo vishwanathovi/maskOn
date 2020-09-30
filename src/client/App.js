@@ -6,13 +6,33 @@ import axios from "axios";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import Typography from "@material-ui/core/Typography";
+import PhotoSizeSelectActualOutlinedIcon from "@material-ui/icons/PhotoSizeSelectActualOutlined";
+import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
+import CardActionArea from "@material-ui/core/CardActionArea";
+
+import WebcamCapture from "./WebcamCapture";
+
 export default class App extends Component {
   state = { username: null, model: null };
 
   componentDidMount() {
     fetch("/api/getUsername")
       .then((res) => res.json())
-      .then((user) => this.setState({ username: user.username, photoURL: "" }));
+      .then((user) =>
+        this.setState({
+          username: user.username,
+          photoURL: "",
+          imgSrc: "",
+          prediction: "with_mask",
+        })
+      );
+
+    this.loadModel();
   }
 
   loadModel = async () => {
@@ -51,6 +71,8 @@ export default class App extends Component {
         }
         console.log(maskFlag);
       });
+
+    tf.dispose(tensor);
   };
 
   onFileChange = (event) => {
@@ -91,19 +113,22 @@ export default class App extends Component {
   };
 
   render() {
-    const { username, photoURL } = this.state;
+    const { username, photoURL, imgSrc, prediction } = this.state;
     return (
-      <div>
+      <Container>
         <h1> MaskON </h1>
-        <button onClick={this.loadModel}> Load model </button>
-        <div className="upload-main">
-          <h3> Upload Your Own Image </h3>
-          <div>
-            <input type="file" onChange={this.onFileChange} />
-          </div>
-          {this.fileData()}
-          <div>
-            <img
+        <h2> A Deep learning based mask detection system</h2>
+        <Grid container spacing={5} height="25%" alignItems="center">
+          <Grid item xs={6} className="upload-main">
+            <Card>
+              <CardActionArea>
+                <PhotoSizeSelectActualOutlinedIcon fontSize="large" />
+                <Typography variant="h4"> Upload Your Own Image </Typography>
+                {/*<div>
+                  <input type="file" onChange={this.onFileChange} />
+                </div>*/}
+                <div>
+                  {/* <img
               id="display-img"
               ref={(ref) => {
                 this.photoref = ref;
@@ -112,17 +137,43 @@ export default class App extends Component {
               width="500px"
               height="500px"
               onLoad={this.predictImage}
-            />
-          </div>
-        </div>
-        <div className="webcam-main">
-          <h3> Start Webcam </h3>
-          <Webcam />
-        </div>
-        <div className="default-images-main">
-          <h3> Choose from a default list of Images </h3>
-        </div>
-      </div>
+            /> */}
+                </div>
+              </CardActionArea>
+            </Card>
+          </Grid>
+          <Grid item xs={6} className="webcam-main">
+            <Card>
+              <CardActionArea>
+                <PhotoCameraOutlinedIcon fontSize="large" />
+                <Typography variant="h4"> Use Webcam </Typography>
+                {/*<WebcamCapture predict={this.predictImage} />*/}
+              </CardActionArea>
+            </Card>
+          </Grid>
+        </Grid>
+        <Grid container className="image-mode">
+          <Grid item container spacing={3}>
+            <Grid item xs>
+              <Button xs={4}>Go back</Button>
+            </Grid>
+            <Grid item xs>
+              <Button variant="contained" color="primary">
+                Upload picture
+              </Button>
+            </Grid>
+            <Grid item xs>
+              <Button>Use webcam</Button>
+            </Grid>
+          </Grid>
+          <Grid item xs>
+            {imgSrc && <img src={imgSrc} />}
+          </Grid>
+          <Grid item xs>
+            {prediction && <p>Prediction: {prediction}</p>}
+          </Grid>
+        </Grid>
+      </Container>
     );
   }
 }

@@ -13,15 +13,26 @@
   "author": "Sandeep Raveesh",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@tensorflow/tfjs": "^2.4.0",
     "axios": "^0.20.0",
     "babel-polyfill": "^6.26.0",
     "cors": "^2.8.5",
     "express": "^4.16.3",
+    "feather-icons": "^4.28.0",
+    "framer-motion": "^2.7.6",
     "punycode": "^2.1.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-webcam": "^5.2.0"
+    "react-modal": "^3.11.2",
+    "react-slick": "^0.27.11",
+    "react-webcam": "^5.2.0",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^5.2.0",
+    "tailwindcss": "^1.8.10",
+    "twin.macro": "^1.10.0",
+    "use-in-view": "^1.0.15"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
