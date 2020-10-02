@@ -15,7 +15,8 @@ import PhotoSizeSelectActualOutlinedIcon from "@material-ui/icons/PhotoSizeSelec
 import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
 import CardActionArea from "@material-ui/core/CardActionArea";
 
-import WebcamCapture from "./WebcamCapture";
+import ImageMode from "./ImageMode";
+import WebcamMode from "./WebcamMode";
 
 export default class App extends Component {
   state = { username: null, model: null };
@@ -29,6 +30,7 @@ export default class App extends Component {
           photoURL: "",
           imgSrc: "",
           prediction: "with_mask",
+          mode: "main",
         })
       );
 
@@ -87,91 +89,70 @@ export default class App extends Component {
     // this.predictImage(img);
   };
 
-  // File content to be displayed after
-  // file upload is complete
-  fileData = () => {
-    if (this.state.selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-          <p>File Name: {this.state.selectedFile.name}</p>
-          <p>File Type: {this.state.selectedFile.type}</p>
-          <p>
-            Last Modified:{" "}
-            {this.state.selectedFile.lastModifiedDate.toDateString()}
-          </p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
-    }
+  changeMode = (mode) => {
+    this.setState({
+      mode,
+    });
   };
 
   render() {
-    const { username, photoURL, imgSrc, prediction } = this.state;
+    const { username, photoURL, imgSrc, prediction, mode } = this.state;
     return (
       <Container>
         <h1> MaskON </h1>
         <h2> A Deep learning based mask detection system</h2>
         <Grid container spacing={5} height="25%" alignItems="center">
-          <Grid item xs={6} className="upload-main">
-            <Card>
-              <CardActionArea>
-                <PhotoSizeSelectActualOutlinedIcon fontSize="large" />
-                <Typography variant="h4"> Upload Your Own Image </Typography>
-                {/*<div>
-                  <input type="file" onChange={this.onFileChange} />
-                </div>*/}
-                <div>
-                  {/* <img
-              id="display-img"
-              ref={(ref) => {
-                this.photoref = ref;
-              }}
-              src={photoURL}
-              width="500px"
-              height="500px"
-              onLoad={this.predictImage}
-            /> */}
-                </div>
-              </CardActionArea>
-            </Card>
-          </Grid>
-          <Grid item xs={6} className="webcam-main">
-            <Card>
-              <CardActionArea>
-                <PhotoCameraOutlinedIcon fontSize="large" />
-                <Typography variant="h4"> Use Webcam </Typography>
-                {/*<WebcamCapture predict={this.predictImage} />*/}
-              </CardActionArea>
-            </Card>
-          </Grid>
-        </Grid>
-        <Grid container className="image-mode">
-          <Grid item container spacing={3}>
-            <Grid item xs>
-              <Button xs={4}>Go back</Button>
-            </Grid>
-            <Grid item xs>
-              <Button variant="contained" color="primary">
-                Upload picture
-              </Button>
-            </Grid>
-            <Grid item xs>
-              <Button>Use webcam</Button>
-            </Grid>
-          </Grid>
-          <Grid item xs>
-            {imgSrc && <img src={imgSrc} />}
-          </Grid>
-          <Grid item xs>
-            {prediction && <p>Prediction: {prediction}</p>}
-          </Grid>
+          {mode == "main" && (
+            <>
+              <Grid item xs={6} className="upload-main">
+                <Card>
+                  <CardActionArea
+                    onClick={() => {
+                      this.changeMode("image-mode");
+                    }}
+                  >
+                    <PhotoSizeSelectActualOutlinedIcon fontSize="large" />
+                    <Typography variant="h4">
+                      {" "}
+                      Upload Your Own Image{" "}
+                    </Typography>
+                    {/*<div>
+                            <input type="file" onChange={this.onFileChange} />
+                          </div>*/}
+                    <div>
+                      {/* <img
+                        id="display-img"
+                        ref={(ref) => {
+                          this.photoref = ref;
+                        }}
+                        src={photoURL}
+                        width="500px"
+                        height="500px"
+                        onLoad={this.predictImage}
+                      /> */}
+                    </div>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+              <Grid item xs={6} className="webcam-main">
+                <Card>
+                  <CardActionArea
+                    onClick={() => {
+                      this.changeMode("webcam-mode");
+                    }}
+                  >
+                    <PhotoCameraOutlinedIcon fontSize="large" />
+                    <Typography variant="h4"> Use Webcam </Typography>
+                    {/*<WebcamCapture predict={this.predictImage} />*/}
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            </>
+          )}
+          {mode == "image-mode" && (
+            <ImageMode changeMode={this.changeMode} prediction="" />
+          )}
+          {mode == "webcam-mode" && <WebcamMode changeMode={this.changeMode} />}
         </Grid>
       </Container>
     );

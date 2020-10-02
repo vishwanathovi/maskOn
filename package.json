@@ -20,6 +20,7 @@
     "babel-polyfill": "^6.26.0",
     "cors": "^2.8.5",
     "express": "^4.16.3",
+    "face-api.js": "^0.22.2",
     "feather-icons": "^4.28.0",
     "framer-motion": "^2.7.6",
     "punycode": "^2.1.1",
