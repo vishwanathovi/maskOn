@@ -29,8 +29,8 @@ const WebcamMode = (props) => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs>
-        {/*<WebcamCapture predict={predictImage} />*/}
+      <Grid item xs={12}>
+        <WebcamCapture predict={predictImage} />
       </Grid>
       <Grid item xs>
         {prediction && <p>Prediction: {prediction}</p>}

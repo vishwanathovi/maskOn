@@ -29,7 +29,7 @@ export default class App extends Component {
           username: user.username,
           photoURL: "",
           imgSrc: "",
-          prediction: "with_mask",
+          prediction: "",
           mode: "main",
         })
       );
@@ -49,8 +49,7 @@ export default class App extends Component {
   predictImage = async () => {
     const { model } = this.state;
     const img = document.getElementById("display-img");
-
-    // console.log(img);
+    let maskFlag;
     let maxPixel = tf.scalar(255);
     let tensor = tf.browser
       .fromPixels(img)
@@ -59,34 +58,23 @@ export default class App extends Component {
       .div(maxPixel)
       .expandDims();
 
-    // console.log("tensor: ", tensor.toString());
-
     model
       .predict(tensor)
       .data()
       .then((predictions) => {
-        let maskFlag = "";
         if (predictions < 0.5) {
           maskFlag = "With Mask";
         } else {
           maskFlag = "Without Mask";
         }
+
         console.log(maskFlag);
+        this.setState({
+          prediction: maskFlag,
+        });
       });
 
     tf.dispose(tensor);
-  };
-
-  onFileChange = (event) => {
-    // Update the state
-    var photo = event.target.files[0];
-    const photoURL = URL.createObjectURL(photo);
-
-    this.setState({ photoURL, photo }, () => {
-      // this.predictImage();
-    });
-
-    // this.predictImage(img);
   };
 
   changeMode = (mode) => {
@@ -116,21 +104,6 @@ export default class App extends Component {
                       {" "}
                       Upload Your Own Image{" "}
                     </Typography>
-                    {/*<div>
-                            <input type="file" onChange={this.onFileChange} />
-                          </div>*/}
-                    <div>
-                      {/* <img
-                        id="display-img"
-                        ref={(ref) => {
-                          this.photoref = ref;
-                        }}
-                        src={photoURL}
-                        width="500px"
-                        height="500px"
-                        onLoad={this.predictImage}
-                      /> */}
-                    </div>
                   </CardActionArea>
                 </Card>
               </Grid>
@@ -150,9 +123,19 @@ export default class App extends Component {
             </>
           )}
           {mode == "image-mode" && (
-            <ImageMode changeMode={this.changeMode} prediction="" />
+            <ImageMode
+              changeMode={this.changeMode}
+              prediction={prediction}
+              predictImage={this.predictImage}
+            />
           )}
-          {mode == "webcam-mode" && <WebcamMode changeMode={this.changeMode} />}
+          {mode == "webcam-mode" && (
+            <WebcamMode
+              changeMode={this.changeMode}
+              prediction={prediction}
+              predictImage={this.predictImage}
+            />
+          )}
         </Grid>
       </Container>
     );

@@ -5,7 +5,17 @@ import Button from "@material-ui/core/Button";
 const ImageMode = (props) => {
   const [imgSrc, setImgSrc] = React.useState(null);
 
-  const { prediction, changeMode } = props;
+  const { prediction, changeMode, predictImage } = props;
+
+  const onFileChange = (event) => {
+    // Update the state
+    var photo = event.target.files[0];
+    const photoURL = URL.createObjectURL(photo);
+
+    setImgSrc(photoURL);
+
+    // this.predictImage(img);
+  };
 
   return (
     <Grid container className="image-mode">
@@ -35,10 +45,15 @@ const ImageMode = (props) => {
           </Button>
         </Grid>
       </Grid>
-      <Grid item xs>
-        {imgSrc && <img src={imgSrc} />}
+      <Grid item xs={12}>
+        <div>
+          <input type="file" onChange={onFileChange} />
+        </div>
       </Grid>
-      <Grid item xs>
+      <Grid item xs={12}>
+        {imgSrc && <img id="display-img" onLoad={predictImage} src={imgSrc} />}
+      </Grid>
+      <Grid item xs={12}>
         {prediction && <p>Prediction: {prediction}</p>}
       </Grid>
     </Grid>
