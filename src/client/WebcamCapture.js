@@ -28,6 +28,7 @@ export default class WebcamCapture extends Component {
 
     this.state = {
       imgSrc: "",
+      interval: "",
     };
   }
 
@@ -37,7 +38,15 @@ export default class WebcamCapture extends Component {
       this.setState({
         imgSrc,
       });
-    }, 3000);
+    }, 500);
+
+    this.setState({
+      interval,
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.interval);
   }
 
   render() {
@@ -51,7 +60,7 @@ export default class WebcamCapture extends Component {
           screenshotFormat="image/jpeg"
         />
         <img
-          id="display-img"
+          id="display-web-img"
           onLoad={predict}
           src={this.state.imgSrc}
           style={{ display: "none" }}

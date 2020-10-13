@@ -1,24 +1,27 @@
 import React, { Component } from "react";
 import "./app.css";
-import ReactImage from "./react.png";
 
 import axios from "axios";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
 
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import Typography from "@material-ui/core/Typography";
-import PhotoSizeSelectActualOutlinedIcon from "@material-ui/icons/PhotoSizeSelectActualOutlined";
-import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
-import CardActionArea from "@material-ui/core/CardActionArea";
 
 import ImageMode from "./ImageMode";
 import WebcamMode from "./WebcamMode";
+import Header from "./Header";
+import HomePage from "./HomePage";
 
-export default class App extends Component {
+const useStyles = (theme) => ({
+  containerMain: {
+    padding: "15px",
+  },
+});
+
+class App extends Component {
   state = { username: null, model: null };
 
   componentDidMount() {
@@ -47,8 +50,14 @@ export default class App extends Component {
   };
 
   predictImage = async () => {
-    const { model } = this.state;
-    const img = document.getElementById("display-img");
+    const { model, mode } = this.state;
+    var img;
+    if (mode == "image-mode") {
+      img = document.getElementById("display-img");
+    } else {
+      img = document.getElementById("display-web-img");
+    }
+
     let maskFlag;
     let maxPixel = tf.scalar(255);
     let tensor = tf.browser
@@ -83,61 +92,46 @@ export default class App extends Component {
     });
   };
 
+  changeView = () => {
+    const { username, photoURL, imgSrc, prediction, mode } = this.state;
+    switch (mode) {
+      case "main":
+        return <HomePage changeMode={this.changeMode} />;
+      case "image-mode":
+        return (
+          <ImageMode
+            changeMode={this.changeMode}
+            prediction={prediction}
+            predictImage={this.predictImage}
+          />
+        );
+      case "webcam-mode":
+        return (
+          <WebcamMode
+            changeMode={this.changeMode}
+            prediction={prediction}
+            predictImage={this.predictImage}
+          />
+        );
+        break;
+      default:
+    }
+  };
+
   render() {
     const { username, photoURL, imgSrc, prediction, mode } = this.state;
+    const { classes } = this.props;
     return (
-      <Container>
-        <h1> MaskON </h1>
-        <h2> A Deep learning based mask detection system</h2>
-        <Grid container spacing={5} height="25%" alignItems="center">
-          {mode == "main" && (
-            <>
-              <Grid item xs={6} className="upload-main">
-                <Card>
-                  <CardActionArea
-                    onClick={() => {
-                      this.changeMode("image-mode");
-                    }}
-                  >
-                    <PhotoSizeSelectActualOutlinedIcon fontSize="large" />
-                    <Typography variant="h4">
-                      {" "}
-                      Upload Your Own Image{" "}
-                    </Typography>
-                  </CardActionArea>
-                </Card>
-              </Grid>
-              <Grid item xs={6} className="webcam-main">
-                <Card>
-                  <CardActionArea
-                    onClick={() => {
-                      this.changeMode("webcam-mode");
-                    }}
-                  >
-                    <PhotoCameraOutlinedIcon fontSize="large" />
-                    <Typography variant="h4"> Use Webcam </Typography>
-                    {/*<WebcamCapture predict={this.predictImage} />*/}
-                  </CardActionArea>
-                </Card>
-              </Grid>
-            </>
-          )}
-          {mode == "image-mode" && (
-            <ImageMode
-              changeMode={this.changeMode}
-              prediction={prediction}
-              predictImage={this.predictImage}
-            />
-          )}
-          {mode == "webcam-mode" && (
-            <WebcamMode
-              changeMode={this.changeMode}
-              prediction={prediction}
-              predictImage={this.predictImage}
-            />
-          )}
-        </Grid>
-      </Container>
+      <>
+        <Header />
+        <Container className={classes.containerMain}>
+          <Grid container spacing={5} height="25%" alignItems="center">
+            {this.changeView(mode)}
+          </Grid>
+        </Container>
+      </>
     );
   }
 }
+
+export default withStyles(useStyles)(App);
