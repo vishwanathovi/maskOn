@@ -46,7 +46,6 @@ const HomePage = (props) => {
           >
             <PhotoCameraOutlinedIcon fontSize="large" />
             <Typography variant="h4"> Use Webcam </Typography>
-            {/*<WebcamCapture predict={this.predictImage} />*/}
           </CardActionArea>
         </Card>
       </Grid>

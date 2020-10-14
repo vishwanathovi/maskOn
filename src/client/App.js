@@ -4,6 +4,7 @@ import "./app.css";
 import axios from "axios";
 import * as tf from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
+import * as faceapi from "face-api.js";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -22,68 +23,143 @@ const useStyles = (theme) => ({
 });
 
 class App extends Component {
-  state = { username: null, model: null };
+  state = {
+    model: null,
+    mode: "main",
+  };
 
   componentDidMount() {
-    fetch("/api/getUsername")
-      .then((res) => res.json())
-      .then((user) =>
-        this.setState({
-          username: user.username,
-          photoURL: "",
-          imgSrc: "",
-          prediction: "",
-          mode: "main",
-        })
-      );
-
     this.loadModel();
   }
 
   loadModel = async () => {
     let model = await tf.loadLayersModel(
-      "http://localhost:8080/data/model.json" // Define server URL as a constant
+      "http://localhost:8080/data/maskModel/model.json" // TODO:: Define server URL as a constant
     );
 
+    console.log("Info:: Mask model loaded successfully");
+
+    await faceapi.nets.tinyFaceDetector.load(
+      "http://localhost:8080/data/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
+    );
+
+    console.log("Info:: Face model loaded successfully");
+
     this.setState({ model });
-    console.log("model loaded successfully");
   };
 
-  predictImage = async () => {
-    const { model, mode } = this.state;
-    var img;
-    if (mode == "image-mode") {
-      img = document.getElementById("display-img");
+  /*
+  Detects all the faces from the Image/Webcam and calls predictImage and drawMaskDetections
+
+  Inputs:
+    mode: image/webcam
+
+  Returns:
+    None
+*/
+  detectAllFaces = async () => {
+    let { mode } = this.state;
+    let input;
+    if (mode == "webcam-mode") {
+      input = document.getElementById("display-web-img");
     } else {
-      img = document.getElementById("display-web-img");
+      input = document.getElementById("display-img");
     }
 
-    let maskFlag;
-    let maxPixel = tf.scalar(255);
-    let tensor = tf.browser
-      .fromPixels(img)
-      .resizeNearestNeighbor([150, 150])
-      .toFloat()
-      .div(maxPixel)
-      .expandDims();
+    const displaySize = { width: input.width, height: input.height };
+    const detections = await faceapi.detectAllFaces(
+      input,
+      new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.3 })
+    );
+    const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-    model
-      .predict(tensor)
-      .data()
-      .then((predictions) => {
-        if (predictions < 0.5) {
-          maskFlag = "With Mask";
-        } else {
-          maskFlag = "Without Mask";
-        }
+    let canvases = await faceapi.extractFaces(input, resizedDetections);
 
-        console.log(maskFlag);
-        this.setState({
-          prediction: maskFlag,
+    let predictions = await this.predictImage(canvases);
+
+    this.drawMaskDetections(predictions, resizedDetections);
+  };
+
+  /*
+    Draws the predictions on the Image/WebCam
+
+    Input:
+      predictions: details on the mask prediction
+
+    Output:
+      None
+  */
+
+  drawMaskDetections = (predictions, resizedDetections) => {
+    if (!predictions) return;
+
+    let { mode } = this.state;
+    var input;
+    var camCanvas;
+    if (mode == "webcam-mode") {
+      input = document.getElementById("display-web-img");
+      camCanvas = document.getElementById("webCamCanvas");
+    } else {
+      input = document.getElementById("display-img");
+      camCanvas = document.getElementById("imgCanvas");
+    }
+
+    const displaySize = { width: input.width, height: input.height };
+
+    const context = camCanvas.getContext("2d"); // Clearing the canvas
+    context.clearRect(0, 0, camCanvas.width, camCanvas.height);
+
+    for (let i = 0; i < predictions.length; i++) {
+      let maskFlag = predictions[i] > 0.5 ? "Without Mask" : "With Mask";
+
+      let box = resizedDetections[i]._box;
+      let drawOptions = {
+        label: maskFlag,
+      };
+
+      const drawBox = new faceapi.draw.DrawBox(box, drawOptions);
+      drawBox.draw(camCanvas);
+    }
+  };
+
+  /*
+    Predicts the mask presence and sends out updated canvases
+
+    Input:
+      canvases: List of canvases having face images
+
+    Output:
+      predictions: List of mask prediction data for each element in the canvases
+
+  */
+  predictImage = async (canvases) => {
+    const { model, mode } = this.state;
+
+    var img;
+    var predictions = [];
+    var confidenceValue;
+
+    if (!canvases) return;
+
+    for (let i = 0; i < canvases.length; i++) {
+      img = canvases[i];
+      let tensor = tf.browser
+        .fromPixels(img)
+        .resizeNearestNeighbor([150, 150])
+        .toFloat()
+        .div(tf.scalar(255))
+        .expandDims();
+
+      await model
+        .predict(tensor)
+        .data()
+        .then((confidence) => {
+          predictions.push(confidence[0]);
         });
-      });
 
-    tf.dispose(tensor);
+      tf.dispose(tensor);
+    }
+    return predictions;
   };
 
   changeMode = (mode) => {
@@ -93,7 +169,7 @@ class App extends Component {
   };
 
   changeView = () => {
-    const { username, photoURL, imgSrc, prediction, mode } = this.state;
+    const { mode } = this.state;
     switch (mode) {
       case "main":
         return <HomePage changeMode={this.changeMode} />;
@@ -101,16 +177,14 @@ class App extends Component {
         return (
           <ImageMode
             changeMode={this.changeMode}
-            prediction={prediction}
-            predictImage={this.predictImage}
+            detectAllFaces={this.detectAllFaces}
           />
         );
       case "webcam-mode":
         return (
           <WebcamMode
             changeMode={this.changeMode}
-            prediction={prediction}
-            predictImage={this.predictImage}
+            detectAllFaces={this.detectAllFaces}
           />
         );
         break;
@@ -119,7 +193,14 @@ class App extends Component {
   };
 
   render() {
-    const { username, photoURL, imgSrc, prediction, mode } = this.state;
+    const {
+      username,
+      photoURL,
+      imgSrc,
+      prediction,
+      mode,
+      testSrc,
+    } = this.state;
     const { classes } = this.props;
     return (
       <>
@@ -128,6 +209,7 @@ class App extends Component {
           <Grid container spacing={5} height="25%" alignItems="center">
             {this.changeView(mode)}
           </Grid>
+          {testSrc && <img src={testSrc} />}
         </Container>
       </>
     );

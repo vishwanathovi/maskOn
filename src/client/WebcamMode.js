@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import WebcamCapture from "./WebcamCapture";
 
 const WebcamMode = (props) => {
-  const { prediction, predictImage, changeMode } = props;
+  const { prediction, detectAllFaces, changeMode } = props;
 
   return (
     <Grid container className="image-mode">
@@ -30,7 +30,7 @@ const WebcamMode = (props) => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <WebcamCapture predict={predictImage} />
+        <WebcamCapture predict={detectAllFaces} />
       </Grid>
       <Grid item xs>
         {prediction && <p>Prediction: {prediction}</p>}

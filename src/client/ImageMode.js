@@ -1,20 +1,42 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  imgMain: { position: "relative" },
+  img: {
+    position: "absolute",
+  },
+  canvas: {
+    position: "absolute",
+  },
+}));
 
 const ImageMode = (props) => {
+  const { detectAllFaces } = props;
   const [imgSrc, setImgSrc] = React.useState(null);
+  const classes = useStyles();
 
   const { prediction, changeMode, predictImage } = props;
 
   const onFileChange = (event) => {
-    // Update the state
     var photo = event.target.files[0];
     const photoURL = URL.createObjectURL(photo);
 
     setImgSrc(photoURL);
 
     // this.predictImage(img);
+  };
+
+  const callPredictImage = () => {
+    let canvas = document.getElementById("imgCanvas");
+    let img = document.getElementById("display-img");
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    detectAllFaces("image");
   };
 
   return (
@@ -51,7 +73,17 @@ const ImageMode = (props) => {
         </div>
       </Grid>
       <Grid item xs={12}>
-        {imgSrc && <img id="display-img" onLoad={predictImage} src={imgSrc} />}
+        {imgSrc && (
+          <div className={classes.imgMain}>
+            <img
+              className={classes.img}
+              id="display-img"
+              onLoad={callPredictImage}
+              src={imgSrc}
+            />
+            <canvas id="imgCanvas" className={classes.canvas}></canvas>
+          </div>
+        )}
       </Grid>
       <Grid item xs={12}>
         {prediction && <p>Prediction: {prediction}</p>}
@@ -61,3 +93,6 @@ const ImageMode = (props) => {
 };
 
 export default ImageMode;
+
+// add a canvas above the image
+// draw image on top of it

@@ -1,27 +1,19 @@
 import React, { Component } from "react";
 import Webcam from "react-webcam";
 
-// const WebcamCapture = () => {
-//   const webcamRef = React.useRef(null);
-//   const [imgSrc, setImgSrc] = React.useState(null);
-//
-//   const capture = React.useCallback(() => {
-//     const imageSrc = webcamRef.current.getScreenshot();
-//     setImgSrc(imageSrc);
-//   }, [webcamRef, setImgSrc]);
-//
-//   return (
-//     <>
-//       <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
-//       <button onClick={capture}>Capture photo</button>
-//       {imgSrc && <img src={imgSrc} />}
-//     </>
-//   );
-// };
-//
-// export default WebcamCapture;
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
-export default class WebcamCapture extends Component {
+const useStyles = (theme) => ({
+  webcamMain: { position: "relative" },
+  webcam: {
+    position: "absolute",
+  },
+  canvas: {
+    position: "absolute",
+  },
+});
+
+class WebcamCapture extends Component {
   constructor(props) {
     super(props);
     this.webcamRef = React.createRef(null);
@@ -38,7 +30,7 @@ export default class WebcamCapture extends Component {
       this.setState({
         imgSrc,
       });
-    }, 500);
+    }, 1000);
 
     this.setState({
       interval,
@@ -50,22 +42,32 @@ export default class WebcamCapture extends Component {
   }
 
   render() {
-    const { predict } = this.props;
+    const { predict, classes } = this.props;
 
     return (
-      <>
+      <div className={classes.webcamMain}>
         <Webcam
+          id="webcam-video"
+          className={classes.webcam}
           audio={false}
           ref={this.webcamRef}
           screenshotFormat="image/jpeg"
         />
+        <canvas
+          id="webCamCanvas"
+          className={classes.canvas}
+          width="640"
+          height="480"
+        ></canvas>
         <img
           id="display-web-img"
           onLoad={predict}
           src={this.state.imgSrc}
           style={{ display: "none" }}
         />
-      </>
+      </div>
     );
   }
 }
+
+export default withStyles(useStyles)(WebcamCapture);
