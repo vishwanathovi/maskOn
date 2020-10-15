@@ -62,7 +62,8 @@ class App extends Component {
     console.log("Info:: Mask model loaded successfully");
 
     await faceapi.nets.tinyFaceDetector.load(
-      "http://localhost:8080/data/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
+      url +
+        "data/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
     );
 
     console.log("Info:: Face model loaded successfully");
