@@ -49,7 +49,7 @@ class App extends Component {
   }
 
   loadModel = async () => {
-    let url = "http://localhost:8080/";
+    let url = "https://mask-on-dl.herokuapp.com/";
 
     if (process.env.NODE_ENV === "production") {
       url = "https://mask-on-dl.herokuapp.com/";
