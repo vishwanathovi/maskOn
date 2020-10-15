@@ -49,8 +49,14 @@ class App extends Component {
   }
 
   loadModel = async () => {
+    let url = "http://localhost:8080/";
+
+    if (process.env.NODE_ENV === "production") {
+      url = "https://mask-on-dl.herokuapp.com/";
+    }
+
     let model = await tf.loadLayersModel(
-      "http://localhost:8080/data/maskModel/model.json" // TODO:: Define server URL as a constant
+      url + "data/maskModel/model.json" // TODO:: Define server URL as a constant
     );
 
     console.log("Info:: Mask model loaded successfully");
