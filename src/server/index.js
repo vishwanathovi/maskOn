@@ -12,10 +12,6 @@ app.options("*", cors());
 var assetsPath = path.join(__dirname, "./model");
 app.use("/data", express.static(assetsPath));
 
-app.get("/api/getUsername", (req, res) =>
-  res.send({ username: os.userInfo().username })
-);
-
 app.listen(process.env.PORT || 8080, () =>
   console.log(`Listening on port ${process.env.PORT || 8080}!`)
 );

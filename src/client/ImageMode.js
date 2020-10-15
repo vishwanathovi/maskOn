@@ -3,13 +3,24 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
+import BackIcon from "./back.svg";
+import WebCamIcon from "./web-cam.svg";
+
 const useStyles = makeStyles((theme) => ({
+  imgModeMain: {
+    margin: "10px 0px",
+  },
   imgMain: { position: "relative" },
   img: {
     position: "absolute",
   },
   canvas: {
     position: "absolute",
+  },
+  icon: {
+    height: "30px",
+    marginRight: "10px",
+    filter: "grayscale(100%)",
   },
 }));
 
@@ -25,8 +36,6 @@ const ImageMode = (props) => {
     const photoURL = URL.createObjectURL(photo);
 
     setImgSrc(photoURL);
-
-    // this.predictImage(img);
   };
 
   const callPredictImage = () => {
@@ -40,29 +49,32 @@ const ImageMode = (props) => {
   };
 
   return (
-    <Grid container className="image-mode">
+    <Grid container className={classes.imgModeMain}>
       <Grid item container spacing={3}>
         <Grid item xs>
           <Button
+            className={classes.secondaryButton}
             onClick={() => {
               changeMode("main");
             }}
             xs={4}
+            variant="contained"
+            color="primary"
           >
-            Go back
+            <img className={classes.icon} src={BackIcon} alt="BackIcon" /> Go
+            back
           </Button>
         </Grid>
-        <Grid item xs>
-          <Button variant="contained" color="primary">
-            Upload picture
-          </Button>
-        </Grid>
+
         <Grid item xs>
           <Button
             onClick={() => {
               changeMode("webcam-mode");
             }}
+            variant="contained"
+            color="primary"
           >
+            <img className={classes.icon} src={WebCamIcon} alt="webCamIcon" />{" "}
             Use webcam
           </Button>
         </Grid>
