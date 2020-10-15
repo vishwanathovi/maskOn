@@ -7,6 +7,7 @@ import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -15,6 +16,21 @@ import ImageMode from "./ImageMode";
 import WebcamMode from "./WebcamMode";
 import Header from "./Header";
 import HomePage from "./HomePage";
+
+const THEME = createMuiTheme({
+  typography: {
+    fontFamily: `"Montserrat", sans-serif`,
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+  },
+  palette: {
+    primary: {
+      main: "#0160d2",
+    },
+  },
+});
 
 const useStyles = (theme) => ({
   containerMain: {
@@ -25,7 +41,7 @@ const useStyles = (theme) => ({
 class App extends Component {
   state = {
     model: null,
-    mode: "main",
+    mode: "image-mode",
   };
 
   componentDidMount() {
@@ -203,7 +219,7 @@ class App extends Component {
     } = this.state;
     const { classes } = this.props;
     return (
-      <>
+      <MuiThemeProvider theme={THEME}>
         <Header />
         <Container className={classes.containerMain}>
           <Grid container spacing={5} height="25%" alignItems="center">
@@ -211,7 +227,7 @@ class App extends Component {
           </Grid>
           {testSrc && <img src={testSrc} />}
         </Container>
-      </>
+      </MuiThemeProvider>
     );
   }
 }
