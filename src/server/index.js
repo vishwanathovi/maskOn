@@ -11,6 +11,11 @@ app.options("*", cors());
 // app.use(express.static("dist"));
 var assetsPath = path.join(__dirname, "./model");
 app.use("/data", express.static(assetsPath));
+app.use(express.static(path.join(__dirname, "./build")));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 app.listen(process.env.PORT || 8080, () =>
   console.log(`Listening on port ${process.env.PORT || 8080}!`)
