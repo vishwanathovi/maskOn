@@ -7,9 +7,13 @@ const useStyles = (theme) => ({
   webcamMain: { position: "relative" },
   webcam: {
     position: "absolute",
+    transform: "translate(-50%, 0%)",
+    padding: "10px",
   },
   canvas: {
     position: "absolute",
+    transform: "translate(-50%, 0%)",
+    padding: "10px",
   },
 });
 

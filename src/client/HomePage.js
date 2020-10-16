@@ -28,7 +28,7 @@ const HomePage = (props) => {
 
   return (
     <>
-      <Grid item xs={6} className="upload-main">
+      <Grid item sm={12} md={6} className="upload-main">
         <Card className="card">
           <CardContent
             className={classes.cardMain}
@@ -52,7 +52,7 @@ const HomePage = (props) => {
           </CardContent>
         </Card>
       </Grid>
-      <Grid item xs={6} className="webcam-main">
+      <Grid item sm={12} md={6} className="webcam-main">
         <Card className="card">
           <CardContent
             className={classes.cardMain}

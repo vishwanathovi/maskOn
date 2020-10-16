@@ -13,9 +13,13 @@ const useStyles = makeStyles((theme) => ({
   imgMain: { position: "relative" },
   img: {
     position: "absolute",
+    transform: "translate(-50%, 0%)",
+    padding: "10px",
   },
   canvas: {
     position: "absolute",
+    transform: "translate(-50%, 0%)",
+    padding: "10px",
   },
   icon: {
     height: "30px",
@@ -81,7 +85,14 @@ const ImageMode = (props) => {
       </Grid>
       <Grid item xs={12}>
         <div>
-          <input type="file" onChange={onFileChange} />
+          <Button variant="contained" component="label">
+            Upload File
+            <input
+              type="file"
+              onChange={onFileChange}
+              style={{ display: "none" }}
+            />
+          </Button>
         </div>
       </Grid>
       <Grid item xs={12}>
@@ -96,9 +107,6 @@ const ImageMode = (props) => {
             <canvas id="imgCanvas" className={classes.canvas}></canvas>
           </div>
         )}
-      </Grid>
-      <Grid item xs={12}>
-        {prediction && <p>Prediction: {prediction}</p>}
       </Grid>
     </Grid>
   );

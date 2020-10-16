@@ -16,6 +16,7 @@ import ImageMode from "./ImageMode";
 import WebcamMode from "./WebcamMode";
 import Header from "./Header";
 import HomePage from "./HomePage";
+import DetailsSection from "./DetailsSection";
 
 const THEME = createMuiTheme({
   typography: {
@@ -41,7 +42,7 @@ const useStyles = (theme) => ({
 class App extends Component {
   state = {
     model: null,
-    mode: "image-mode",
+    mode: "main",
   };
 
   componentDidMount() {
@@ -49,7 +50,8 @@ class App extends Component {
   }
 
   loadModel = async () => {
-    let url = "https://mask-on-dl.herokuapp.com/";
+    // let url = "https://mask-on-dl.herokuapp.com/";
+    let url = "http://localhost:8080/";
 
     if (process.env.NODE_ENV === "production") {
       url = "https://mask-on-dl.herokuapp.com/";
@@ -89,6 +91,8 @@ class App extends Component {
       input = document.getElementById("display-img");
     }
 
+    if (!input) return;
+
     const displaySize = { width: input.width, height: input.height };
     const detections = await faceapi.detectAllFaces(
       input,
@@ -114,7 +118,7 @@ class App extends Component {
   */
 
   drawMaskDetections = (predictions, resizedDetections) => {
-    if (!predictions) return;
+    if (!predictions || !resizedDetections) return;
 
     let { mode } = this.state;
     var input;
@@ -126,6 +130,8 @@ class App extends Component {
       input = document.getElementById("display-img");
       camCanvas = document.getElementById("imgCanvas");
     }
+
+    if (!input || !camCanvas) return;
 
     const displaySize = { width: input.width, height: input.height };
 
@@ -156,13 +162,13 @@ class App extends Component {
 
   */
   predictImage = async (canvases) => {
+    if (!canvases) return;
+
     const { model, mode } = this.state;
 
     var img;
     var predictions = [];
     var confidenceValue;
-
-    if (!canvases) return;
 
     for (let i = 0; i < canvases.length; i++) {
       img = canvases[i];
@@ -232,7 +238,7 @@ class App extends Component {
           <Grid container spacing={5} height="25%" alignItems="center">
             {this.changeView(mode)}
           </Grid>
-          {testSrc && <img src={testSrc} />}
+          {/* <DetailsSection /> */}
         </Container>
       </MuiThemeProvider>
     );
