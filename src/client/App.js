@@ -16,7 +16,7 @@ import ImageMode from "./ImageMode";
 import WebcamMode from "./WebcamMode";
 import Header from "./Header";
 import HomePage from "./HomePage";
-import DetailsSection from "./DetailsSection";
+// import DetailsSection from "./DetailsSection";
 
 const THEME = createMuiTheme({
   typography: {
