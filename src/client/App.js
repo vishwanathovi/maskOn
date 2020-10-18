@@ -85,15 +85,19 @@ class App extends Component {
   detectAllFaces = async () => {
     let { mode } = this.state;
     let input;
-    if (mode == "webcam-mode") {
-      input = document.getElementById("display-web-img");
-    } else {
+    let displaySize;
+
+    if (mode == "image-mode") {
       input = document.getElementById("display-img");
+    } else {
+      input = document.getElementById("display-web-img");
     }
 
     if (!input) return;
 
-    const displaySize = { width: input.width, height: input.height };
+    displaySize = { width: input.width, height: input.height };
+    // console.log(displaySize);
+
     const detections = await faceapi.detectAllFaces(
       input,
       new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.3 })
@@ -124,16 +128,12 @@ class App extends Component {
     var input;
     var camCanvas;
     if (mode == "webcam-mode") {
-      input = document.getElementById("display-web-img");
       camCanvas = document.getElementById("webCamCanvas");
     } else {
-      input = document.getElementById("display-img");
       camCanvas = document.getElementById("imgCanvas");
     }
 
-    if (!input || !camCanvas) return;
-
-    const displaySize = { width: input.width, height: input.height };
+    if (!camCanvas) return;
 
     const context = camCanvas.getContext("2d"); // Clearing the canvas
     context.clearRect(0, 0, camCanvas.width, camCanvas.height);

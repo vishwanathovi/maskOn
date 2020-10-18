@@ -8,13 +8,16 @@ import WebCamIcon from "./web-cam.svg";
 
 const useStyles = makeStyles((theme) => ({
   imgModeMain: {
-    margin: "10px 0px",
+    margin: "20px 0px",
   },
   imgMain: { position: "relative" },
   img: {
     position: "absolute",
     transform: "translate(-50%, 0%)",
     padding: "10px",
+    [theme.breakpoints.down("xs")]: {
+      width: "90vw",
+    },
   },
   canvas: {
     position: "absolute",
@@ -25,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     height: "30px",
     marginRight: "10px",
     filter: "grayscale(100%)",
+  },
+  uploadButtonContainer: {
+    marginTop: "10px",
   },
 }));
 
@@ -84,7 +90,7 @@ const ImageMode = (props) => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <div>
+        <div className={classes.uploadButtonContainer}>
           <Button variant="contained" component="label">
             Upload File
             <input

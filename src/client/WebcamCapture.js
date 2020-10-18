@@ -39,6 +39,17 @@ class WebcamCapture extends Component {
     this.setState({
       interval,
     });
+    if (window.innerWidth < 640) {
+      this.setState({
+        camWidth: 320,
+        camHeight: 240,
+      });
+    } else {
+      this.setState({
+        camWidth: 640,
+        camHeight: 480,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -47,6 +58,7 @@ class WebcamCapture extends Component {
 
   render() {
     const { predict, classes } = this.props;
+    const { camWidth, camHeight } = this.state;
 
     return (
       <div className={classes.webcamMain}>
@@ -56,12 +68,14 @@ class WebcamCapture extends Component {
           audio={false}
           ref={this.webcamRef}
           screenshotFormat="image/jpeg"
+          width={camWidth}
+          height={camHeight}
         />
         <canvas
           id="webCamCanvas"
           className={classes.canvas}
-          width="640"
-          height="480"
+          width={camWidth}
+          height={camHeight}
         ></canvas>
         <img
           id="display-web-img"
