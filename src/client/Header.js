@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 
 import Logo from "./logo.svg";
 
@@ -13,9 +15,17 @@ const useStyles = makeStyles((theme) => ({
   },
   headerGrid: {
     height: "80px",
+    [theme.breakpoints.down("sm")]: {
+      justifyContent: "center",
+    },
   },
   headerGridItem: {
     height: "100%",
+  },
+  headerGridItem2: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
   logoImage: {
     height: "100%",
@@ -40,7 +50,10 @@ const Header = () => {
           <Grid item className={classes.headerGridItem}>
             <img className={classes.logoImage} src={Logo} alt="Main Logo" />
           </Grid>
-          <Grid item className={classes.headerGridItem}>
+          <Grid
+            item
+            className={`${classes.headerGridItem} ${classes.headerGridItem2}`}
+          >
             <h2 className={classes.headerText}>
               {" "}
               A Deep Learning Based Mask Detection System

@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import PhotoSizeSelectActualOutlinedIcon from "@material-ui/icons/PhotoSizeSelectActualOutlined";
 import PhotoCameraOutlinedIcon from "@material-ui/icons/PhotoCameraOutlined";
 import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
 
 const useStyles = makeStyles((theme) => ({
   cardMain: {
@@ -14,11 +15,22 @@ const useStyles = makeStyles((theme) => ({
     // boxShadow: "-1px 15px 30px -12px black",
     // background:
     // "linear-gradient(90deg, rgba(1,96,210,1) 0%, rgba(255,255,255,1) 66%)",
+    width: "100%",
   },
-  imgContainer: {},
+  imgContainer: {
+    width: "100%",
+  },
   img: {
     minWidth: "100%",
     minHeight: "100%",
+  },
+  cardText: {
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.5rem",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "1.2rem",
+    },
   },
 }));
 
@@ -38,13 +50,17 @@ const HomePage = (props) => {
           >
             <Grid container alignItems="center">
               <Grid item xs={7}>
-                <Typography variant="h4"> Upload Own Image </Typography>
+                <Typography variant="h4" className={classes.cardText}>
+                  {" "}
+                  Upload Own Image{" "}
+                </Typography>
               </Grid>
               <Grid item xs={5}>
                 <div className={classes.imgContainer}>
-                  <img
+                  <CardMedia
+                    component="img"
+                    image={require("./image-photo.jpg")}
                     className={classes.img}
-                    src={require("./image-photo.jpg")}
                   />
                 </div>
               </Grid>
@@ -62,11 +78,18 @@ const HomePage = (props) => {
           >
             <Grid container alignItems="center">
               <Grid item xs={7}>
-                <Typography variant="h4"> Use Webcam </Typography>
+                <Typography variant="h4" className={classes.cardText}>
+                  {" "}
+                  Use Webcam{" "}
+                </Typography>
               </Grid>
               <Grid item xs={5}>
                 <div className={classes.imgContainer}>
-                  <img src={require("./webcam-photo.jpg")} />
+                  <CardMedia
+                    component="img"
+                    image={require("./webcam-photo.jpg")}
+                    className={classes.img}
+                  />
                 </div>
               </Grid>
             </Grid>
