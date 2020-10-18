@@ -1,14 +1,15 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 
-const outputDirectory = "./src/server/build";
+const outputDirectory = "./build";
 
 module.exports = {
   entry: ["babel-polyfill", "./src/client/index.js"],
   output: {
     path: path.join(__dirname, outputDirectory),
-    filename: "bundle.js",
+    filename: "index.bundle.js",
   },
   module: {
     rules: [
@@ -45,6 +46,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
+    }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify("production"),
     }),
   ],
 };

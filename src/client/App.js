@@ -1,10 +1,17 @@
 import React, { Component } from "react";
 import "./app.css";
+import Async from "react-code-splitting";
 
-import axios from "axios";
-import * as tf from "@tensorflow/tfjs";
+// import { loadLayersModel, browser, scalar, dispose } from "@tensorflow/tfjs";
 import Webcam from "react-webcam";
-import * as faceapi from "face-api.js";
+import {
+  nets,
+  detectAllFaces,
+  TinyFaceDetectorOptions,
+  resizeResults,
+  extractFaces,
+  draw,
+} from "face-api.js";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -63,7 +70,7 @@ class App extends Component {
 
     console.log("Info:: Mask model loaded successfully");
 
-    await faceapi.nets.tinyFaceDetector.load(
+    await nets.tinyFaceDetector.load(
       url +
         "data/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
     );
@@ -98,13 +105,13 @@ class App extends Component {
     displaySize = { width: input.width, height: input.height };
     // console.log(displaySize);
 
-    const detections = await faceapi.detectAllFaces(
+    const detections = await detectAllFaces(
       input,
-      new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.3 })
+      new TinyFaceDetectorOptions({ scoreThreshold: 0.3 })
     );
-    const resizedDetections = faceapi.resizeResults(detections, displaySize);
+    const resizedDetections = resizeResults(detections, displaySize);
 
-    let canvases = await faceapi.extractFaces(input, resizedDetections);
+    let canvases = await extractFaces(input, resizedDetections);
 
     let predictions = await this.predictImage(canvases);
 
@@ -146,7 +153,7 @@ class App extends Component {
         label: maskFlag,
       };
 
-      const drawBox = new faceapi.draw.DrawBox(box, drawOptions);
+      const drawBox = new draw.DrawBox(box, drawOptions);
       drawBox.draw(camCanvas);
     }
   };
