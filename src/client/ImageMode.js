@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   img: {
     position: "absolute",
     transform: "translate(-50%, 0%)",
+    maxWidth: "90vw",
     padding: "10px",
     [theme.breakpoints.down("xs")]: {
       width: "90vw",
