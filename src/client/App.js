@@ -23,7 +23,7 @@ import ImageMode from "./ImageMode";
 import WebcamMode from "./WebcamMode";
 import Header from "./Header";
 import HomePage from "./HomePage";
-// import DetailsSection from "./DetailsSection";
+import DetailsSection from "./DetailsSection";
 
 const THEME = createMuiTheme({
   typography: {
@@ -245,7 +245,6 @@ class App extends Component {
           <Grid container spacing={5} height="25%" alignItems="center">
             {this.changeView(mode)}
           </Grid>
-          {/* <DetailsSection /> */}
         </Container>
       </MuiThemeProvider>
     );
