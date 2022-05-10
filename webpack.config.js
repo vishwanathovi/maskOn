@@ -53,9 +53,4 @@ module.exports = {
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),
   ],
-  resolve: {
-    fallback: {
-      "fs": false
-    },
-  }
 };
