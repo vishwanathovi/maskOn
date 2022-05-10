@@ -32,6 +32,7 @@ module.exports = {
   },
   resolve: {
     extensions: ["*", ".js", ".jsx"],
+
   },
   devServer: {
     port: 3000,
@@ -52,4 +53,9 @@ module.exports = {
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),
   ],
+  resolve: {
+    fallback: {
+      "fs": false
+    },
+  }
 };
