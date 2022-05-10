@@ -61,7 +61,7 @@ class App extends Component {
     let url = "http://localhost:8080/";
 
     if (process.env.NODE_ENV === "production") {
-      url = "https://mask-on-dl.herokuapp.com/";
+      url = "https://melodic-lolly-70c9fa.netlify.app/";
     }
 
     let model = await tf.loadLayersModel(
