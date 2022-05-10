@@ -82,7 +82,7 @@ const DetailsSection = (props) => {
           <Typography variant="body1">Tools: Webpack, Babel, Git</Typography>
         </li>
         <li>
-          <Typography variant="body1">Deployment: Heroku</Typography>
+          <Typography variant="body1">Deployment: Netlify</Typography>
         </li>
       </ul>
       <Typography variant="h5">Data Science: </Typography>

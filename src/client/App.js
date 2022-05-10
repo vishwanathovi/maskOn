@@ -72,7 +72,7 @@ class App extends Component {
 
     await nets.tinyFaceDetector.load(
       url +
-        "data/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
+      "data/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
     );
 
     console.log("Info:: Face model loaded successfully");
