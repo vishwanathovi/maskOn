@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 const outputDirectory = "./src/server/build";
 
@@ -52,5 +53,13 @@ module.exports = {
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, "/src/server/model"),
+          to: "model"
+        }
+      ]
+    })
   ],
 };
