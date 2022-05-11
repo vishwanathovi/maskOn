@@ -65,14 +65,14 @@ class App extends Component {
     }
 
     let model = await tf.loadLayersModel(
-      url + "data/maskModel/model.json" // TODO:: Define server URL as a constant
+      url + "model/maskModel/model.json" // TODO:: Define server URL as a constant
     );
 
     console.log("Info:: Mask model loaded successfully");
 
     await nets.tinyFaceDetector.load(
       url +
-      "data/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
+      "model/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
     );
 
     console.log("Info:: Face model loaded successfully");
