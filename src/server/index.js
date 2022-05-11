@@ -12,7 +12,7 @@ app.options("*", cors());
 
 // console.log("Test::Vishwa ", __dirname)
 var assetsPath = path.join(__dirname, "./model");
-app.use("/data", express.static(assetsPath));
+app.use("/model", express.static(assetsPath));
 app.use(express.static(path.join(__dirname, "./build")));
 
 app.get("/*", (req, res) => {
