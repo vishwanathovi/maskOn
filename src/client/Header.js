@@ -48,7 +48,9 @@ const Header = () => {
           alignItems="center"
         >
           <Grid item className={classes.headerGridItem}>
-            <img className={classes.logoImage} src={Logo} alt="Main Logo" />
+            <a href="/" style={{ textDecoration: 'none' }}>
+              <img className={classes.logoImage} src={Logo} alt="Main Logo" />
+            </a>
           </Grid>
           <Grid
             item
