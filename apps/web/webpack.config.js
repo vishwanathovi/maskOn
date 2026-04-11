@@ -5,8 +5,11 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const outputDirectory = "./src/server/build";
+const modelsSource = path.join(__dirname, "src/server/static/models");
 
-module.exports = {
+module.exports = (env, argv) => {
+  const mode = argv.mode || "development";
+  return {
   entry: ["babel-polyfill", "./src/client/index.js"],
   output: {
     path: path.join(__dirname, outputDirectory),
@@ -41,6 +44,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: {
       "/api": "http://localhost:8080",
+      "/model": "http://localhost:8080",
     },
   },
   plugins: [
@@ -51,15 +55,21 @@ module.exports = {
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify("production"),
+      "process.env.NODE_ENV": JSON.stringify(
+        mode === "production" ? "production" : "development"
+      ),
+      "process.env.MODEL_BASE_URL": JSON.stringify(
+        process.env.MODEL_BASE_URL || ""
+      ),
     }),
     new CopyPlugin({
       patterns: [
         {
-          from: path.join(__dirname, "/src/server/model"),
-          to: "model"
-        }
-      ]
+          from: modelsSource,
+          to: "model",
+        },
+      ],
     })
   ],
+};
 };

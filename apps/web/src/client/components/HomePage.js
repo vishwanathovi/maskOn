@@ -59,7 +59,7 @@ const HomePage = (props) => {
                 <div className={classes.imgContainer}>
                   <CardMedia
                     component="img"
-                    image={require("./image-photo.jpg")}
+                    image={require("../image-photo.jpg")}
                     className={classes.img}
                   />
                 </div>
@@ -87,7 +87,7 @@ const HomePage = (props) => {
                 <div className={classes.imgContainer}>
                   <CardMedia
                     component="img"
-                    image={require("./webcam-photo.jpg")}
+                    image={require("../webcam-photo.jpg")}
                     className={classes.img}
                   />
                 </div>

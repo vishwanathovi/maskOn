@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import "./app.css";
-import Async from "react-code-splitting";
-
-// import { loadLayersModel, browser, scalar, dispose } from "@tensorflow/tfjs";
-import Webcam from "react-webcam";
+import * as tf from "@tensorflow/tfjs";
+import { loadLayersModel } from "@tensorflow/tfjs";
 import {
   nets,
   detectAllFaces,
@@ -15,15 +13,24 @@ import {
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
-import ImageMode from "./ImageMode";
-import WebcamMode from "./WebcamMode";
-import Header from "./Header";
-import HomePage from "./HomePage";
-import DetailsSection from "./DetailsSection";
+import ImageMode from "./components/ImageMode";
+import WebcamMode from "./components/WebcamMode";
+import Header from "./components/Header";
+import HomePage from "./components/HomePage";
+
+function getModelBaseUrl() {
+  const envBase = process.env.MODEL_BASE_URL;
+  if (envBase && String(envBase).trim()) {
+    return String(envBase).replace(/\/$/, "");
+  }
+  if (typeof window !== "undefined" && window.location) {
+    return `${window.location.protocol}//${window.location.host}`;
+  }
+  return "http://localhost:8080";
+}
 
 const THEME = createMuiTheme({
   typography: {
@@ -57,22 +64,16 @@ class App extends Component {
   }
 
   loadModel = async () => {
-    // let url = "https://mask-on-dl.herokuapp.com/";
-    let url = "http://localhost:8080/";
+    const base = getModelBaseUrl();
 
-    if (process.env.NODE_ENV === "production") {
-      url = "https://melodic-lolly-70c9fa.netlify.app/";
-    }
-
-    let model = await tf.loadLayersModel(
-      url + "model/maskModel/model.json" // TODO:: Define server URL as a constant
+    const model = await loadLayersModel(
+      `${base}/model/maskModel/model.json`
     );
 
     console.log("Info:: Mask model loaded successfully");
 
     await nets.tinyFaceDetector.load(
-      url +
-      "model/faceDetectionModel/tiny_face_detector_model-weights_manifest.json"
+      `${base}/model/faceDetectionModel/tiny_face_detector_model-weights_manifest.json`
     );
 
     console.log("Info:: Face model loaded successfully");

@@ -1,17 +1,17 @@
 {
-  "name": "simple-react-full-stack",
+  "name": "face-mask-web",
   "version": "1.0.0",
-  "description": "Boilerplate to build a full stack web application using React, Node.js, Express and Webpack.",
+  "description": "Web UI for face mask detection (Project 3 monorepo).",
   "main": "src/server/index.js",
   "scripts": {
     "heroku-prebuild": "npm install --dev",
-    "build": "webpack --mode production",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider node_modules/.bin/webpack --mode production",
     "start": "npm run build && node src/server/index.js",
-    "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
+    "client": "NODE_OPTIONS=--openssl-legacy-provider node_modules/.bin/webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon src/server/index.js",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
-  "author": "Sandeep Raveesh",
+  "author": "",
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -22,6 +22,7 @@
     "copy-webpack-plugin": "^6.4.1",
     "cors": "^2.8.5",
     "express": "^4.16.3",
+    "@tensorflow/tfjs": "^2.8.6",
     "face-api.js": "^0.22.2",
     "feather-icons": "^4.28.0",
     "framer-motion": "^2.7.6",
@@ -37,8 +38,7 @@
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.2.0",
     "tailwindcss": "^1.8.10",
-    "twin.macro": "^1.10.0",
-    "use-in-view": "^1.0.15"
+    "twin.macro": "^1.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

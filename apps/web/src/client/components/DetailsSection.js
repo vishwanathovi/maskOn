@@ -49,7 +49,7 @@ const DetailsSection = (props) => {
         application where deep learning is utilized.
       </Typography>
       <Typography variant="h4">How MaskOn Works?</Typography>
-      <CardMedia component="img" image={require("./flow-diagram.png")} />
+      <CardMedia component="img" image={require("../flow-diagram.png")} />
       <ul>
         <li>
           <Typography variant="body1">

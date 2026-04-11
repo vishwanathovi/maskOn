@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mask-detector-training"
+version = "1.0.0"
+description = "Train and export face mask model for Project 3 monorepo"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "tensorflow>=2.12,<3",
+  "opencv-python>=4.5",
+  "imutils>=0.5",
+  "matplotlib>=3.5",
+  "scikit-learn>=1.0",
+  "numpy>=1.21",
+]
+
+[project.optional-dependencies]
+export = ["tensorflowjs>=4.11,<5"]
+
+[project.scripts]
+mask-detector-train = "mask_detector_training.train:main"
+mask-detector-infer-image = "mask_detector_training.infer_image:main"
+mask-detector-infer-video = "mask_detector_training.infer_video:main"
+mask-detector-export-web = "mask_detector_training.export_web:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mask_detector_training*"]
