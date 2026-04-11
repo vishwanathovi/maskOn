@@ -7,7 +7,7 @@
 | **Category** | Computer vision + full-stack web — mask vs no-mask classification |
 | **Work type** | Keras training, OpenCV DNN + TF.js deployment, React UI |
 | **Skills** | Transfer learning (MobileNetV2), TF.js export, Express static hosting, face-api.js |
-| **Tech stack** | Python (TensorFlow, OpenCV), JavaScript (React 16, Webpack 4, Express), monorepo layout |
+| **Tech stack** | Python (TensorFlow, OpenCV), JavaScript (React 18, Vite, MUI v5, Express), monorepo layout |
 
 ## What this project does
 
@@ -45,7 +45,7 @@ flowchart TB
 | **Training** | CLI `mask-detector-train`; MobileNetV2 head; augmentations; metrics + plot to `artifacts/` |
 | **Offline** | `mask-detector-infer-image`, `mask-detector-infer-video` (shared pipeline module) |
 | **Web export** | `mask-detector-export-web` → `apps/web/.../static/models/maskModel/` |
-| **Web app** | Webcam + image modes; `MODEL_BASE_URL` for cross-origin deploys; TF.js via npm |
+| **Web app** | Webcam + image modes; optional `VITE_MODEL_BASE_URL` for cross-origin deploys; TF.js via npm |
 
 ## CLI entry points
 

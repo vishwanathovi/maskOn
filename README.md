@@ -8,7 +8,7 @@ Monorepo for **training** a face-mask classifier (Keras), **offline** OpenCV dem
 |------|------|
 | [`training/`](training/) | Python package (`mask_detector_training`), dataset under `training/data/dataset`, Caffe SSD weights under `training/third_party/face_detector` |
 | [`artifacts/`](artifacts/) | Default outputs: `mask_detector.model`, `plot.png`, TF.js staging (gitignored except `.gitkeep`) |
-| [`apps/web/`](apps/web/) | Express + Webpack React UI; static TF.js + face-api weights in `src/server/static/models/` |
+| [`apps/web/`](apps/web/) | Express + Vite/React UI; static TF.js + face-api weights in `src/server/static/models/` |
 
 ## Pipeline
 
@@ -39,7 +39,7 @@ Monorepo for **training** a face-mask classifier (Keras), **offline** OpenCV dem
    npm start
    ```
 
-   Dev: terminal A `npm run server`, terminal B `npm run client` (opens port 3000; `/model` proxied to 8080).
+   Dev: `npm run dev` (or terminal A `npm run server`, terminal B `npm run client`; Vite on 3000 proxies `/model` to 8080).
 
 4. **Optional** — offline image/webcam (requires `artifacts/mask_detector.model`):
 
@@ -50,8 +50,7 @@ Monorepo for **training** a face-mask classifier (Keras), **offline** OpenCV dem
 
 ## Configuration
 
-- **Model URL in the browser:** set at build time with `MODEL_BASE_URL` (see [`apps/web/.env.example`](apps/web/.env.example)).
-- **Node + Webpack 4:** builds use `NODE_OPTIONS=--openssl-legacy-provider` on OpenSSL 3+ (see `apps/web/package.json`).
+- **Model URL in the browser:** optional `VITE_MODEL_BASE_URL` at build time (see [`apps/web/.env.example`](apps/web/.env.example)).
 
 ## Git and large files
 
